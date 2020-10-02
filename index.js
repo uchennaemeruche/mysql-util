@@ -1,20 +1,5 @@
-const dotenv = require("dotenv");
-dotenv.config();
-const express = require('express');
-const app = express();
 
-const sqlQuery = require('./models/query.model');
-
-app.use(express.json());
-app.use(express.urlencoded());
-
-sqlQuery.setConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    connectionLimit: 25
-});
+const {queryDb, setConnection} = require('./models/query.model');
 
 function checkParamType(data){
     if(typeof data == 'string') return `'${data}'`;
@@ -105,13 +90,13 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null){
     return query;
 }   
 
-function runCode(queryType, tableName, requestBody, params) {
+let runQuery = function(queryType, tableName, requestBody, params) {
 
     let query = constructQuery(queryType, tableName, requestBody, params);
     return new Promise((resolve, reject) => {
 
     try{
-        sqlQuery.queryDB(query, (err, result) =>{
+        queryDB(query, (err, result) =>{
             if(err){
                 resolve(err);
             }
@@ -123,9 +108,11 @@ function runCode(queryType, tableName, requestBody, params) {
         resolve(err.message);
     }
     });
-  }
+}
 
+const sqlQuery = function(){};
+sqlQuery.setConnection = setConnection;
 
-app.listen(3000, () =>{
-    console.log(`Listening on port 3000`);
-});
+sqlQuery.runQuery = runQuery;
+
+exports.mysqlUtil = sqlQuery;
