@@ -15,10 +15,6 @@ sqlQuery.setConnection = async({host, user, password, database, connectionLimit}
     });
 }
 
-
-
-
-
 sqlQuery.queryDB = (query, result) =>{
     let getConnectionFromPool = function(){
         connection.query(query, (err, res) =>{
