@@ -1,4 +1,5 @@
-
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require('express');
 const app = express();
 
@@ -7,71 +8,34 @@ const sqlQuery = require('./models/query.model');
 app.use(express.json());
 app.use(express.urlencoded());
 
-
-app.get("/users", async(req, res) =>{
-    // const query = `SELECT * FROM users`;
-    // const queryResult = await runCode(query);
-
-    const queryResult = await runCode('select', 'users', req.body, {"age" : 30});
-    return res.json({
-        queryResult
-    });
-    
-    
+sqlQuery.setConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    connectionLimit: 25
 });
-
-app.post("/user", async(req, res) =>{
-    const queryResult = await runCode('insert', 'users', req.body, '');
-    console.log(queryResult);
-    return res.json({
-        queryResult
-    });
-});
-
-app.put("/users", async(req, res) =>{
-    params = {
-        "age": 28,
-        "gender": "female"
-    };
-    
-    const queryResult = await runCode('update', 'users', req.body, params, 'AND');
-    
-    console.log(queryResult);
-    return res.json({
-        queryResult
-    });
-});
-
-
-async function runQuery(query){
-    try{
-        await sqlQuery.queryDB(query, (err, result) =>{
-            if(err){
-                console.log("There is an error");
-                return err;
-            }
-            else{
-                console.log("There is a result", result);
-                return {
-                    message:"success",
-                    data: result
-                };
-            }
-        });
-    }catch(e){
-        res.status(400).send({
-            error: e.message
-        })
-    }
-}
 
 function checkParamType(data){
     if(typeof data == 'string') return `'${data}'`;
     else return `${data}`;
 }
 
+function matchQueryFilters(query, params){
+    let counter = 0;
+    params.where[0].unshift("");
+    for(param in params.where){
+        query +=  `${params.where[param][1]} ${ params.where[param][2]} ` + checkParamType(params.where[param][3]);
+        counter ++;
+        if(counter < params.where.length){
+            query += ` ${params.where[counter][0]} `;
+        }  
+    }
+    return query;
+}
 
-function constructQuery(queryKeyword, tableName, requestBody, params = null, operator = 'AND'){
+
+function constructQuery(queryKeyword, tableName, requestBody, params = null){
     const keyWords = {
         SELECT: 'select',
         UPDATE: 'update',
@@ -86,14 +50,8 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null, ope
         if(params == null)
             query = `SELECT * FROM ${tableName}`;
         else{
-            query = `SELECT * FROM ${tableName} WHERE `
-            for(param in params){
-                query += `${param} = ` + checkParamType(params[param]);
-                counter ++;
-                if(counter < Object.entries(params).length){
-                    query += ` ${operator} `;
-                }
-            }
+            query = `SELECT * FROM ${tableName} WHERE `;
+            query = matchQueryFilters(query, params);
         }
     }else if(queryKeyword == keyWords.UPDATE){
         query = `UPDATE ${tableName} SET `;
@@ -106,18 +64,9 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null, ope
                 query += `, `;
         }
         counter = 0;
-        // query += ` WHERE ${params.name} = ${params.value} `
         query += ` WHERE `;
 
-        for(param in params){
-            query += `${param} = ` + checkParamType(params[param]);
-            counter ++;
-            if(counter < Object.entries(params).length){
-                query += ` ${operator} `;
-            }
-        }
-
-        console.log("Update Query: ", query);
+        query = matchQueryFilters(query, params);
 
     }else if(queryKeyword == keyWords.INSERT){
         let fieldLength = Object.entries(requestBody).length;
@@ -144,57 +93,37 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null, ope
             }
                
         }
+    }else if(queryKeyword == keyWords.DELETE){
+        if(params == null)
+            query = `DELETE FROM ${tableName}`;
+        else{
+            query = `DELETE FROM ${tableName} WHERE `;
+
+            query = matchQueryFilters(query, params)
+        }
     }
     return query;
 }   
 
-function runCode(queryKeyword, tableName, requestBody, params, operator) {
+function runCode(queryType, tableName, requestBody, params) {
 
-    query = constructQuery(queryKeyword, tableName, requestBody, params, operator);
-    console.log("starting fast promise")
+    let query = constructQuery(queryType, tableName, requestBody, params);
     return new Promise((resolve, reject) => {
 
     try{
         sqlQuery.queryDB(query, (err, result) =>{
             if(err){
-                console.log("There is an error");
                 resolve(err);
             }
             else{
-                console.log("There is a result", result);
                 resolve(result);
             }
         });
     }catch(e){
         resolve(err.message);
     }
-    })
+    });
   }
-
-
-
-
-
-// function runCode(query) {
-//     console.log("starting fast promise")
-//     return new Promise((resolve, reject) => {
-
-//     try{
-//         sqlQuery.queryDB(query, (err, result) =>{
-//             if(err){
-//                 // console.log("There is an error");
-//                 resolve(err);
-//             }
-//             else{
-//                 console.log("There is a result", result);
-//                 resolve(result);
-//             }
-//         });
-//     }catch(e){
-//         resolve(err.message);
-//     }
-//     })
-//   }
 
 
 app.listen(3000, () =>{

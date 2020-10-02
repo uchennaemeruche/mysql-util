@@ -1,7 +1,7 @@
 {
   "name": "mysql-crud-util",
   "version": "1.0.0",
-  "description": "",
+  "description": "A mysQL utility function for performing CRUD operations",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,6 +1,23 @@
-const connection = require('../connection/db');
+// const connection = require('../connection/db');
+const mysql = require("mysql");
 
 const sqlQuery = function(){};
+
+let connection;
+
+sqlQuery.setConnection = async({host, user, password, database, connectionLimit}) =>{
+    connection  = await mysql.createPool({
+        host: host,
+        user: user,
+        password: password,
+        database: database,
+        connectionLimit: connectionLimit
+    });
+}
+
+
+
+
 
 sqlQuery.queryDB = (query, result) =>{
     let getConnectionFromPool = function(){
