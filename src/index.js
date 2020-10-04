@@ -1,5 +1,19 @@
 
-const {queryDb, setConnection} = require('./models/query.model');
+// const {queryDb, setConnection} = require('./models/query.model');
+
+const mysql = require("mysql");
+
+let connection;
+
+async function setConnection({host, user, password, database, connectionLimit}){
+    connection  = await mysql.createPool({
+        host: host,
+        user: user,
+        password: password,
+        database: database,
+        connectionLimit: connectionLimit
+    });
+}
 
 function checkParamType(data){
     if(typeof data == 'string') return `'${data}'`;
@@ -9,7 +23,7 @@ function checkParamType(data){
 function matchQueryFilters(query, params){
     let counter = 0;
     params.where[0].unshift("");
-    for(param in params.where){
+    for(let param in params.where){
         query +=  `${params.where[param][1]} ${ params.where[param][2]} ` + checkParamType(params.where[param][3]);
         counter ++;
         if(counter < params.where.length){
@@ -31,7 +45,6 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null){
     let query = ``;
 
     if (queryKeyword == keyWords.SELECT){
-        let counter = 0;
         if(params == null)
             query = `SELECT * FROM ${tableName}`;
         else{
@@ -42,7 +55,7 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null){
         query = `UPDATE ${tableName} SET `;
         let fieldLength = Object.entries(requestBody).length;
         let counter = 0;
-        for(field in requestBody){
+        for(let field in requestBody){
             query += (`${field} = ` + checkParamType(requestBody[field]));
             counter ++;
             if(counter < fieldLength) 
@@ -58,7 +71,7 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null){
         let counter = 0;
 
         query = `INSERT INTO ${tableName} (`;
-        for(field in requestBody){
+        for(let field in requestBody){
             query += (`${field}`)
             counter ++;
             if(counter < fieldLength) 
@@ -66,7 +79,7 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null){
             else{
                 query += `) VALUES(`;
                 counter = 0;
-                for(value in requestBody){
+                for(let value in requestBody){
                     query +=    checkParamType(requestBody[value]);
                     counter ++;
                     if(counter < fieldLength){
@@ -93,10 +106,9 @@ function constructQuery(queryKeyword, tableName, requestBody, params = null){
 let runQuery = function(queryType, tableName, requestBody, params) {
 
     let query = constructQuery(queryType, tableName, requestBody, params);
-    return new Promise((resolve, reject) => {
-
+    return new Promise((resolve) => {
     try{
-        queryDB(query, (err, result) =>{
+        queryDb(query, (err, result) =>{
             if(err){
                 resolve(err);
             }
@@ -104,15 +116,34 @@ let runQuery = function(queryType, tableName, requestBody, params) {
                 resolve(result);
             }
         });
-    }catch(e){
+    }catch(err){
         resolve(err.message);
     }
     });
 }
 
-const sqlQuery = function(){};
-sqlQuery.setConnection = setConnection;
 
-sqlQuery.runQuery = runQuery;
+function queryDb(query, result){
+    let getConnectionFromPool = function(){
+        connection.query(query, (err, res) =>{
+            if(err){
+                if(err.code == "ECONNREFUSED"){
+                    getConnectionFromPool();
+                    return;
+                }
+                // console.log("An Error occured")
+                // console.log(err);
+                result(err, null);
+                return;
+            }
+            if(res){
+                result(null, res);
+                return;
+            }
+        });
+    }
+    getConnectionFromPool();
+}
 
-exports.mysqlUtil = sqlQuery;
+exports.setConnection = setConnection;
+exports.runQuery = runQuery;
