@@ -1,17 +1,39 @@
 {
   "name": "mysql-crud-util",
   "version": "1.0.0",
-  "description": "A mysQL utility function for performing CRUD operations",
+  "description": "A mySQL utility function for performing CRUD operations",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "build": "npm run lint && babel ./src -d ./lib",
+    "lint": "eslint ./src"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uchennaemeruche/mysql-util.git"
+  },
+  "keywords": [
+    "npm",
+    "node",
+    "mysql",
+    "javascript",
+    "crud",
+    "express",
+    "insert",
+    "procedure"
+  ],
+  "author": "Uchenna Emeruche",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uchennaemeruche/mysql-util/issues"
+  },
+  "homepage": "https://github.com/uchennaemeruche/mysql-util#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }
