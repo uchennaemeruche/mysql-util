@@ -4,3 +4,6 @@
 env
 .idea/
 .vscode/
+/coverage
+/lib
+.nyc_output/
