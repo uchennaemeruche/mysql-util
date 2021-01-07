@@ -7,7 +7,7 @@
     "build": "npm run lint && npm run clean && babel ./src -d ./lib",
     "lint": "eslint ./src",
     "clean": "rimraf lib",
-    "test": "nyc mocha --require @babel/register",
+    "test": "nyc mocha test/*.test.js --require @babel/register",
     "prepublishOnly": "npm run build"
   },
   "nyc": {
