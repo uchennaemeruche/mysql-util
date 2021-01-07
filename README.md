@@ -146,3 +146,7 @@ const result = mysqlUtil.delete({ tableName: "users", params: params }); // mysq
 ### .query method
 
 The package also exposes a generic .query method. See the [test folder on github](https://github.com/uchennaemeruche/mysql-util/tree/master/test) for examples(apis, test) on how to use this method and the ones listed above.
+
+### License
+
+This project is licensed under the MIT License

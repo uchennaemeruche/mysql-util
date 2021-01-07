@@ -54,13 +54,9 @@ const testQueries = [
 
 beforeEach(function () {
   mysqlUtil.setConnection({
-    // eslint-disable-next-line no-undef
     host: process.env.DB_HOST,
-    // eslint-disable-next-line no-undef
     user: process.env.DB_USER,
-    // eslint-disable-next-line no-undef
     password: process.env.DB_PASSWORD,
-    // eslint-disable-next-line no-undef
     database: process.env.DB_NAME,
     connectionLimit: 25,
   });
@@ -76,11 +72,10 @@ describe("#test-queries()", () => {
         .query(queryType, tableName, fields, data, params)
         // .select(tableName, fields, params)
         .then((res) => {
-          console.log("Data: ", res);
+          console.log(res);
           return res;
         })
         .catch((err) => {
-          console.log("Error: ", err);
           return err;
         });
     });
