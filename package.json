@@ -4,7 +4,7 @@
   "description": "A mySQL utility function for performing CRUD operations",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run lint && babel ./src -d ./lib",
+    "build": "npm run lint && npm run clean && babel ./src -d ./lib",
     "lint": "eslint ./src",
     "clean": "rimraf lib",
     "test": "nyc mocha --require @babel/register",

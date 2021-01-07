@@ -25,6 +25,7 @@ The plugin abstracts most redundant mysql CRUD queries from the developer by pro
 ### Configuration and usage
 
 Here is an example of how to use the plugin:
+Note: You can either pass positional args or an object to the methods.
 
 ```js
 const mysqlUtil = require("mysql-query-util");
@@ -37,39 +38,111 @@ mysqlUtil.setConnection({
     connectionLimit: 25 // connection Limit(Integer)
 });
 
-const queryResult = await mysqlUtil.select({tableName, [fieds|columns_to_select], [params|optional]});
-eg: const result = await mysqlUtil.select({tableName:'users'})
+const queryResult = await mysqlUtil.select(tableName, fields, params|Optional);
+const queryResult = await mysqlUtil.select({tableName:String, fields:[fieds|columns_to_select], params:[[params|optional]]});
+
+eg: const result = await  mysqlUtil.select("users");
+eg: const result = await mysqlUtil.select({tableName:'users'});
 
 
 ```
 
-The above code first initializes a connection before making queries.The initialization happens only once as it creates a connection pool and returns an object to be used for subsequent queries.
+The above code first initializes a connection before making queries.The initialization happens only once as it creates a connection pool and returns an connection object to be used for subsequent queries.
 
-In the second paragraph, since all the methods returns promises, we await for the promise or use the .then to get the result of the operation.
+In the second paragraph, since all the methods return a promise, we await for the promise or use the .then to get the result of the operation.
 
 ### Selection query
 
+The package exposes a .select method that runs a mysql select query. This method accepts three(3) positional arguments or an object -
+
 ```js
-const result = await mysqlUtil.select({ tableName: "users" }); // To fetch all records from `users` table and return all fields.
-OR;
-mysqlUtil.select({ tableName: "users" }).then((res) => {});
-OR;
+// Fetch all record from `users` table
+const result = await mysqlUtil.select("users");
+// OR
+const result = await mysqlUtil.select({ tableName: "users" }).then((res) => {});
+
+// Fetch the name and age from the users table
+const result = await mysqlUtil.select("users", ["name", "age"]);
+// OR
+const result = await mysql.select({
+  tableName: "users",
+  fields: ["name", "age"],
+});
+
+// Fetch all female users whose age is greater that 40
+const result = await mysqlUtil.select("users", "*", [
+  ["gender", "like", "female"],
+  ["AND", "age", ">", 40],
+]);
+// OR
 const result = await mysqlUtil.select({
   tableName: "users",
-  params: ["name", "age"],
-}); // To fetch the name and age from the users table.
-OR;
-const result = await mysqlUtil.select({
-  tableName: "users",
-  params: ["name", "age"],
-  params: {
-    where: [
-      ["age", "!=", 13],
-      ["AND", "gender", "like", "male"],
-      ["OR", "id", "=", 1],
-    ],
-  },
-}); // To fetch the name and age from the users table that matches a given condition.
+  fields: ["name", "age"],
+  params: [
+    ["gender", "like", "female"],
+    ["OR", "age", ">", 40],
+  ],
+}); // To fetch the name and age of all female users that pass a given condition.
 ```
 
-### Examples
+### Insert Query
+
+Similary, there is a .insert method that runs a mysql insert query. This method accepts two(2) positional arguments or an object -
+
+```js
+// Insert into `users` table
+let data = {
+  name: "Foo Bar",
+  gender: "female",
+  age: 28,
+};
+const result = await mysqlUtil.insert("users", data); // mysqlUtil.insert({tableName:"users", data}).then((res) => {});
+
+// OR
+const result = await mysqlUtil.insert({ tableName: "users", data: data });
+```
+
+### Update Query
+
+To run an update, use the .update method. This method accepts three arguments(The table, the new data, and the update condition).
+
+```js
+// Insert into `users` table
+let newData = {
+  gender: "male",
+};
+let updateCondition = [
+  ["id", "=", 55],
+  ["AND", "age", "=", 28],
+];
+const result = await mysqlUtil.update("users", newData, updateCondition);
+```
+
+OR
+
+```js
+const result = await mysqlUtil.update({
+  tableName: "users",
+  data: newData,
+  params: updateCondition,
+});
+```
+
+### Delete Query
+
+The .delete method accepts two arguments- The table name and the delete condition:
+
+```js
+let params = [["id", "=", 55]];
+const result = mysqlUtil.delete("users", params);
+```
+
+OR
+
+```js
+const result = mysqlUtil.delete({ tableName: "users", params: params }); // mysqlUtil.delete({ tableName: "users", params });
+```
+
+### .query method
+
+The package also exposes a generic .query method. See the [test folder on github](https://github.com/uchennaemeruche/mysql-util/tree/master/test) for examples(apis, test) on how to use this method and the ones listed above.
