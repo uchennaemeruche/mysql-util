@@ -1,7 +1,11 @@
 # mysql-query-util
 
 [![Build Status](https://travis-ci.com/uchennaemeruche/mysql-util.svg?token=UzXstzQpgUvQ1wppiktz&branch=master)](https://travis-ci.com/uchennaemeruche/mysql-util)
-A simple and light-weight utility module for mysql and nodejs.
+
+[![NPM](https://img.shields.io/npm/l/mysql-query-util)](https://github.com/uchennaemeruche/mysql-util)
+[![npm](https://img.shields.io/npm/v/mysql-query-util)](https://npmjs.com/package/mysql-query-util)
+
+##### A simple and light-weight utility module for mysql and nodejs.
 
 This plugin helps construct mysql queries with more relatable syntax just like most non-sql database management systems. It is a [NodeJs](https://nodejs.org/en) module available through the npm registry so be sure to [download and install NodeJS](https://nodejs.org/en/download) first.
 
