@@ -18,14 +18,14 @@ exports.setConnection = async ({
   database,
   connectionLimit,
 }) => {
-  let conncectionString = await mysql.createPool({
+  let connectionString = await mysql.createPool({
     host,
     user,
     password,
     database,
     connectionLimit,
   });
-  await connectionObj.conn(conncectionString);
+  await connectionObj.conn(connectionString);
 };
 
 let _required = (val) => {
@@ -54,7 +54,6 @@ let matchQueryFilters = (query, params) => {
 
 let checkOptionsType = (options, op) => {
   let query;
-  console.log("Option Type:", typeof options[0]);
   if (options.length == 1 && typeof options[0] != "string") {
     let values = options[0];
     values.queryKeyword = op;
@@ -92,7 +91,6 @@ let checkOptionsType = (options, op) => {
 
 module.exports.select = (...options) => {
   let query = checkOptionsType(options, "select");
-  console.log("QUery:", query);
   return runQuery(query);
 };
 
@@ -111,7 +109,7 @@ module.exports.delete = (...options) => {
   return runQuery(query);
 };
 
-module.exports.callProcedure();
+// module.exports.callProcedure();
 
 let constructQuery = ({
   queryKeyword = _required("queryType"),
@@ -243,10 +241,14 @@ let queryDb = (query, result) => {
     await connectionObj.getConn();
     connectionObj.connection.query(query, (err, res) => {
       if (err) {
+        console.log("Error:", err);
+
         if (err.code == "ECONNREFUSED") {
           getConnectionFromPool();
           return;
         }
+        console.log("Error:", err);
+
         result(err, null);
         return;
       }

@@ -9,11 +9,20 @@ const updateBody = {
 
 const reqBody = {
   name: faker.name.firstName() + " " + faker.name.lastName(),
-  age: Number(faker.random.number().toString().slice(0, 2)),
+  age: Number(faker.datatype.number(100).toString().slice(0, 2)),
+  gender: faker.name.gender() == "Man" ? "Male" : "Female",
+};
+const reqBody2 = {
+  name: faker.name.firstName() + " " + faker.name.lastName(),
+  age: Number(faker.datatype.number(100).toString().slice(0, 2)),
   gender: faker.name.gender() == "Man" ? "Male" : "Female",
 };
 
 const testQueries = [
+  {
+    input: ["delete", "users"],
+    description: "Should delete all records from the database",
+  },
   {
     input: ["insert", "users", "", reqBody, ""],
     description: "should insert a new user and return result",
@@ -50,6 +59,10 @@ const testQueries = [
     input: ["update", "users", "", updateBody, [["id", "=", "51"]]],
     description: "should update gender of user with id:52",
   },
+  {
+    input: ["insert", "users", "", reqBody2, ""],
+    description: "should insert a new user and return result",
+  },
 ];
 
 beforeEach(function () {
@@ -66,28 +79,29 @@ describe("#test-queries()", () => {
   testQueries.forEach((test) => {
     it(test.description, () => {
       // var [tableName, fields, params] = test.input;
+      // eslint-disable-next-line no-unused-vars
       var [queryType, tableName, fields, data, params] = test.input;
 
-      mysqlUtil
-        .select(tableName, fields)
-        .then((res) => {
-          console.log("Res: ", res);
-          return res;
-        })
-        .catch((error) => {
-          return error;
-        });
-
       // mysqlUtil
-      //   .query(queryType, tableName, fields, data, params)
-      //   // .select(tableName, fields, params)
+      //   .select(tableName, fields)
       //   .then((res) => {
-      //     console.log(res);
+      //     console.log("Res: ", res);
       //     return res;
       //   })
-      //   .catch((err) => {
-      //     return err;
+      //   .catch((error) => {
+      //     return error;
       //   });
+
+      mysqlUtil
+        .query(queryType, tableName, fields, data, params)
+        // .select(tableName, fields, params)
+        .then((res) => {
+          console.log(res);
+          return res;
+        })
+        .catch((err) => {
+          return err;
+        });
     });
   });
 });
