@@ -69,15 +69,25 @@ describe("#test-queries()", () => {
       var [queryType, tableName, fields, data, params] = test.input;
 
       mysqlUtil
-        .query(queryType, tableName, fields, data, params)
-        // .select(tableName, fields, params)
+        .select(tableName, fields)
         .then((res) => {
-          console.log(res);
+          console.log("Res: ", res);
           return res;
         })
-        .catch((err) => {
-          return err;
+        .catch((error) => {
+          return error;
         });
+
+      // mysqlUtil
+      //   .query(queryType, tableName, fields, data, params)
+      //   // .select(tableName, fields, params)
+      //   .then((res) => {
+      //     console.log(res);
+      //     return res;
+      //   })
+      //   .catch((err) => {
+      //     return err;
+      //   });
     });
   });
 });

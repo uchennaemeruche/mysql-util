@@ -54,6 +54,7 @@ let matchQueryFilters = (query, params) => {
 
 let checkOptionsType = (options, op) => {
   let query;
+  console.log("Option Type:", typeof options[0]);
   if (options.length == 1 && typeof options[0] != "string") {
     let values = options[0];
     values.queryKeyword = op;
@@ -109,6 +110,8 @@ module.exports.delete = (...options) => {
   let query = checkOptionsType(options, "delete");
   return runQuery(query);
 };
+
+module.exports.callProcedure();
 
 let constructQuery = ({
   queryKeyword = _required("queryType"),
