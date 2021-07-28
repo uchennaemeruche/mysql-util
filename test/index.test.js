@@ -78,25 +78,10 @@ beforeEach(function () {
 describe("#test-queries()", () => {
   testQueries.forEach((test) => {
     it(test.description, () => {
-      // var [tableName, fields, params] = test.input;
-      // eslint-disable-next-line no-unused-vars
       var [queryType, tableName, fields, data, params] = test.input;
-
-      // mysqlUtil
-      //   .select(tableName, fields)
-      //   .then((res) => {
-      //     console.log("Res: ", res);
-      //     return res;
-      //   })
-      //   .catch((error) => {
-      //     return error;
-      //   });
-
       mysqlUtil
         .query(queryType, tableName, fields, data, params)
-        // .select(tableName, fields, params)
         .then((res) => {
-          console.log(res);
           return res;
         })
         .catch((err) => {

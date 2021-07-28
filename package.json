@@ -7,7 +7,7 @@
     "build": "npm run lint && npm run clean && babel ./src -d ./lib",
     "lint": "eslint ./src",
     "clean": "rimraf lib",
-    "test": "nyc mocha test/*.test.js --exit --require @babel/register",
+    "test": "nyc mocha test/*.test.js --exit --require @babel/register --timeout 15000",
     "prepublishOnly": "npm run build"
   },
   "nyc": {
@@ -43,6 +43,7 @@
     "@babel/cli": "^7.14.8",
     "@babel/preset-env": "^7.14.8",
     "@babel/register": "^7.14.5",
+    "chai": "^4.3.4",
     "dotenv": "^10.0.0",
     "eslint": "^7.31.0",
     "faker": "^5.5.3",

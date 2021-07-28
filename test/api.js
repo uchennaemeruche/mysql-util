@@ -89,6 +89,7 @@ app.delete("/users", async (req, res) => {
   const result2 = mysqlUtil.delete({ tableName: "users", params });
   return res.json({ result2 });
 });
+
 app.listen(3000, () => {
   console.log(`Listening on port 3000`);
 });
