@@ -243,7 +243,6 @@ let queryDb = (query, result) => {
     await connectionObj.getConn();
     connectionObj.connection.query(query, (err, res) => {
       if (err) {
-        console.log("ErrorL:", err);
         if (err.code == "ECONNREFUSED") {
           getConnectionFromPool();
           return;
