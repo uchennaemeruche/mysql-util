@@ -11,23 +11,6 @@ let connectionObj = {
   },
 };
 
-let pool;
-
-exports.setConnectionPool = ({
-  host,
-  user,
-  password,
-  database,
-  connectionLimit,
-}) => {
-  pool = mysql.createPool({
-    host,
-    user,
-    password,
-    database,
-    connectionLimit,
-  });
-};
 exports.setConnection = async ({
   host,
   user,
@@ -230,20 +213,6 @@ let runQuery = (query) => {
   });
 };
 
-let newRunQuery = (query) => {
-  return new Promise((resolve) => {
-    try {
-      const result = newQueryDb(query).then((res) => {
-        console.log("Run query result:", result);
-        console.log("Run query res:", res);
-      });
-    } catch (err) {
-      console.log("Run query Error:", err);
-      resolve(err.message);
-    }
-  });
-};
-
 module.exports.rawQuery = runQuery;
 
 module.exports.query = (queryType, tableName, fields, data, params) => {
@@ -268,26 +237,6 @@ module.exports.query = (queryType, tableName, fields, data, params) => {
     }
   });
 };
-
-const newQueryDb = (query) =>
-  new Promise((resolve, reject) => {
-    pool.getConnection((err, connection) => {
-      if (err) {
-        console.log("Pool error:", err);
-        resolve(err);
-      } else {
-        connection.query(query, (error, res) => {
-          if (error) {
-            console.log("Query error:", error);
-            reject(error);
-          } else {
-            console.log("Result:", res);
-            resolve(res);
-          }
-        });
-      }
-    });
-  });
 
 let queryDb = (query, result) => {
   let getConnectionFromPool = async function () {
