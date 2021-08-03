@@ -57,7 +57,7 @@ In the second paragraph, since all the methods return a promise, we await for th
 
 ### Selection query
 
-The package exposes a .select method that runs a mysql select query. This method accepts three(3) positional arguments or an object -
+The package exposes a **.select** method that runs a mysql select query. This method accepts three(3) positional arguments or an object -
 
 ```js
 // Fetch all record from `users` table
@@ -91,7 +91,7 @@ const result = await mysqlUtil.select({
 
 ### Insert Query
 
-Similary, there is a .insert method that runs a mysql insert query. This method accepts two(2) positional arguments or an object -
+Similary, there is a **.insert** method that runs a mysql insert query. This method accepts two(2) positional arguments or an object -
 
 ```js
 // Insert into `users` table
@@ -108,7 +108,7 @@ const result = await mysqlUtil.insert({ tableName: "users", data: data });
 
 ### Update Query
 
-To run an update, use the .update method. This method accepts three arguments(The table, the new data, and the update condition).
+To run an update, use the **.update** method. This method accepts three arguments(The table, the new data, and the update condition).
 
 ```js
 // Insert into `users` table
@@ -134,7 +134,7 @@ const result = await mysqlUtil.update({
 
 ### Delete Query
 
-The .delete method accepts two arguments- The table name and the delete condition:
+The **.delete** method accepts two arguments- The table name and the delete condition:
 
 ```js
 let params = [["id", "=", 55]];
@@ -149,7 +149,31 @@ const result = mysqlUtil.delete({ tableName: "users", params: params }); // mysq
 
 ### .query method
 
-The package also exposes a generic .query method. See the [test folder on github](https://github.com/uchennaemeruche/mysql-util/tree/master/test) for examples(apis, test) on how to use this method and the ones listed above.
+The package also exposes a generic **.query** method. See the [test folder on github](https://github.com/uchennaemeruche/mysql-util/tree/master/test) for examples(apis, test) on how to use this method and the ones listed above.
+
+### Handling Raw SQL query
+
+With the **.rawQuery** method, raw sql queries can be executed. Also, this method can be used to call stored procedures.
+
+```js
+mysqlUtil
+  .rawQuery("CREATE DATABASE IF NOT EXISTS kings_restaurant")
+  .then((result) => {
+    mysqlUtil.rawQuery(
+      "CREATE TABLE IF NOT EXISTS customers(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255), phone VARCHAR(255))"
+    );
+  });
+```
+
+OR
+
+```js
+const result = mysqlUtil.rawQuery("select * from customers");
+
+const result = mysqlUtil.rawQuery("call fetchCustomers"); // Where fetchCustomers is the name of a stored procedure.
+```
+
+See the [test folder on github](https://github.com/uchennaemeruche/mysql-util/blob/master/test/schema.test.js) for examples on how to use this method.
 
 ### License
 
