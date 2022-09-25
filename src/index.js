@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 let connectionObj = {
   connection: null,
@@ -24,6 +24,7 @@ exports.setConnection = async ({
     password,
     database,
     connectionLimit,
+    
   });
   await connectionObj.conn(connectionPool);
 };
@@ -238,6 +239,12 @@ module.exports.query = (queryType, tableName, fields, data, params) => {
   });
 };
 
+
+/**
+	 * Register a Function to Query DB using created connection.
+	 * @param {String} query Valid Mysql Query to be executed
+	 * @param {Function(err, result)} result Callback that returns either an error or success response.
+*/
 let queryDb = (query, result) => {
   let getConnectionFromPool = async function () {
     await connectionObj.getConn();

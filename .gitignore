@@ -7,3 +7,4 @@ env
 /coverage
 /lib
 .nyc_output/
+test/runner.sh

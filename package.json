@@ -8,6 +8,7 @@
     "lint": "eslint ./src",
     "clean": "rimraf lib",
     "test": "nyc mocha test/*.test.js --exit --require @babel/register --timeout 15000",
+    "test:db": "DB_HOST=localhost DB_PASSWORD=wwassword DB_USER=root nyc mocha test/schema.test.js --require @babel/register --timeout 15000",
     "prepublishOnly": "npm run build"
   },
   "nyc": {
@@ -36,9 +37,6 @@
     "url": "https://github.com/uchennaemeruche/mysql-util/issues"
   },
   "homepage": "https://github.com/uchennaemeruche/mysql-util#readme",
-  "dependencies": {
-    "mysql": "^2.18.1"
-  },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/preset-env": "^7.14.8",
@@ -48,6 +46,7 @@
     "eslint": "^7.31.0",
     "faker": "^5.5.3",
     "mocha": "^9.0.3",
+    "mysql2": "^2.3.3",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2"
   }
