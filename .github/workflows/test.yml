@@ -24,11 +24,12 @@ jobs:
           MYSQL_ROOT_PASSWORD: 123456789
           MYSQL_DATABASE: db_tests
           MYSQL_USER: root
-        options: >-
-         --health-cmd mysqladmin ping
-         --health-interval 10s 
-         --health-timeout 5s 
-         --health-retries 3
+        options: --health-cmd="mysqladmin ping -h localhost -u $$MYSQL_USER --password $$MYSQL_PASSWORD" --health-interval=10s --health-timeout=5s --health-retries=3
+        # options: >-
+        #  --health-cmd mysqladmin ping
+        #  --health-interval 10s 
+        #  --health-timeout 5s 
+        #  --health-retries 3
         ports:
           # Maps tcp port 3306 on service container to the host
         - 3306:3306
