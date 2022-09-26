@@ -6,6 +6,8 @@ const mysqlUtil = require("../src/index");
 
 dotenv.config();
 
+const dbName = 'db_tests'
+
 
 const reqBody = {
   name: faker.name.firstName() + " " + faker.name.lastName(),
@@ -32,7 +34,7 @@ describe("#Raw Queries:", () => {
   });
   it("creates a new database when passed a raw query", async() => {
     const result = await mysqlUtil
-      .rawQuery("CREATE DATABASE IF NOT EXISTS kings_restaurant")
+      .rawQuery(`CREATE DATABASE IF NOT EXISTS ${dbName}`)
 
       expect(result).to.not.be.an('error')
       expect(result).to.be.an("object");
@@ -50,7 +52,7 @@ describe("#Raw Queries:", () => {
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: "kings_restaurant",
+        database: dbName,
         connectionLimit: 25,
       });
     });
@@ -128,6 +130,13 @@ describe("#Raw Queries:", () => {
       
     });
     it("calls fetchCustomers stored procedure", async() => {
+       await mysqlUtil.rawQuery(`
+        CREATE PROCEDURE fetchCustomers()
+        BEGIN
+          
+            SELECT * FROM customers;
+        END
+      `);
       const result = await mysqlUtil.rawQuery("call fetchCustomers()");
       expect(result).to.not.be.an('error')
       expect(result).to.be.an("array")
