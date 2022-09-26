@@ -1,0 +1,49 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - master
+      - release
+
+  pull_request:
+    branches:
+      - master
+      - release
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_PASSWORD: 123456789
+          MYSQL_ROOT_PASSWORD: 123456789
+          MYSQL_DATABASE: db_tests
+          MYSQL_USER: root
+        options: >-
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 3306 on service container to the host
+        - 3306:3306
+
+    steps:
+      - name: Install and Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+        id: node
+      
+      - name: Checkout code
+        uses: actions/checkout@v3 
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm run test:db

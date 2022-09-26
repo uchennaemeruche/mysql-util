@@ -4,13 +4,22 @@ let connectionObj = {
   connection: null,
   conn: async function (con) {
     this.connection = con;
-    return this.conneciton;
+    return this.connection;
   },
   async getConn() {
     return await this.connection;
   },
 };
 
+
+/**
+	 * Register a Function to set and initialize DB Connection.
+	 * @param {string} host Database Host
+	 * @param {string} user Database User
+	 * @param {string} user Database Password
+	 * @param {number} connectionLimit Database Connection Limit
+	 * @return {Promise<mysql.Pool>} returns current mysql connection pool.
+*/
 exports.setConnection = async ({
   host,
   user,
@@ -29,14 +38,24 @@ exports.setConnection = async ({
   await connectionObj.conn(connectionPool);
 };
 
+/**
+	 * Register a private function to throw required validation error.
+	 * @param {string} val validation value that failed
+*/
 let _required = (val) => {
   throw new Error(`${val} is required`);
 };
 
+/**
+	 * Register a function to check function parameter type and return the data as string.
+	 * @param {any} data data to check
+   * @return {string}
+*/
 let checkParamType = (data) => {
   if (typeof data == "string") return `'${data}'`;
   else return `${data}`;
 };
+
 
 let matchQueryFilters = (query, params) => {
   let counter = 0;
