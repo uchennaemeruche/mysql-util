@@ -13,17 +13,7 @@ on:
 jobs:
   test:
     name: Test
-    # runs-on: ubuntu-latest
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        # node-version: [10.x, 12.x, 14.x, 15.x, 16.x]
-        node-version: [16.x]
-        os: [ubuntu-latest]
-        # os: [ubuntu-latest, windows-latest, macos-latest]
-        
-
+    runs-on: ubuntu-latest
     services:
       mysql:
         image: mysql:8
@@ -36,35 +26,28 @@ jobs:
         ports:
           # Maps tcp port 3306 on service container to the host
           - 3306:3306
-
-
     steps:
-      - name: Install and Setup NodeJS ${{ matrix.node-version }}
+      - name: Install and Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          # node-version: 16
-          node-version: ${{ matrix.node-version }}
-        id: node
-      
+          node-version: 16
       - name: Checkout code
         uses: actions/checkout@v3 
-      
       - name: Install dependencies
         run: npm ci
-
       - name: Run Tests
         run: npm run test:db
 
   publish:
+    needs: test
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/master' }}
-    needs: [test]
     steps:
       - uses: actions/checkout@v3 
-      - name: Install and Setup NodeJS ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build
       - run: cd lib && npm run semantic-release
