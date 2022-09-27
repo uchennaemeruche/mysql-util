@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - master
-      - release
+      # - release
 
   pull_request:
     branches:
       - master
-      - release
+      # - release
 
 jobs:
   test:
@@ -19,7 +19,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x, 16.x]
+        # node-version: [10.x, 12.x, 14.x, 15.x, 16.x]
+        node-version: [16.x]
         os: [ubuntu-latest]
 
     services:
