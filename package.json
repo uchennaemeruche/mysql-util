@@ -50,9 +50,11 @@
     "faker": "^5.5.3",
     "husky": "^8.0.1",
     "mocha": "^9.0.3",
-    "mysql2": "^2.3.3",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "semantic-release": "^19.0.5"
+  },
+  "dependencies": {
+    "mysql2": "^2.3.3"
   }
 }

@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - master
-      # - release
+      - release
 
   pull_request:
-    branches:
-      - master
+    branches: ['*']
+      # - master
       # - release
 
 jobs:
@@ -53,3 +53,21 @@ jobs:
 
       - name: Run Tests
         run: npm run test:db
+
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/release' }}
+    needs: [test]
+    steps:
+      - uses: actions/checkout@v3 
+      - name: Install and Setup NodeJS ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build
+      - run: cd lib && npm run semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     
