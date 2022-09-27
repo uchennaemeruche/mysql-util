@@ -56,7 +56,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/release' }}
+    if: ${{ github.ref == 'refs/heads/master' }}
     needs: [test]
     steps:
       - uses: actions/checkout@v3 
