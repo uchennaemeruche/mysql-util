@@ -10,7 +10,7 @@
     "test": "nyc mocha test/*.test.js --exit --require @babel/register --timeout 15000",
     "test:db": "DB_HOST=localhost DB_PASSWORD=123456789 DB_USER=root nyc mocha test/*.test.js --exit --require @babel/register --timeout 15000",
     "prepublishOnly": "npm run build",
-    "semantic-release": "semantic-release --branches release"
+    "semantic-release": "semantic-release --branches master"
   },
   "nyc": {
     "reporter": [
