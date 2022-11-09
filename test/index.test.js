@@ -136,16 +136,16 @@ const testQueries = [
     input: ["insert", "users", "", reqBody2, ""],
     description: "should insert a new user and return result",
     expects: function(result){
-      expect(result).to.not.be.an('error')
-        expect(result).to.be.an("object");
-        expect(result).to.include.keys(
-          "fieldCount",
-          "affectedRows",
-          "insertId",
-          "serverStatus",
-        );
-        expect(result.affectedRows).to.equal(1);
-        expect(result.insertId).to.greaterThanOrEqual(1);
+      // expect(result).to.not.be.an('error')
+      expect(result).to.be.an("object");
+      expect(result).to.include.keys(
+        "fieldCount",
+        "affectedRows",
+        "insertId",
+        "serverStatus",
+      );
+      expect(result.affectedRows).to.equal(1);
+      expect(result.insertId).to.greaterThanOrEqual(1);
     }
   },
 ];
