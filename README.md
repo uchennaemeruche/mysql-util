@@ -1,6 +1,6 @@
 # mysql-query-util
 
-[![Build Status](https://travis-ci.com/uchennaemeruche/mysql-util.svg?token=UzXstzQpgUvQ1wppiktz&branch=master)](https://travis-ci.com/uchennaemeruche/mysql-util)
+<!-- [![Build Status](https://travis-ci.com/uchennaemeruche/mysql-util.svg?token=UzXstzQpgUvQ1wppiktz&branch=master)](https://travis-ci.com/uchennaemeruche/mysql-util) -->
 
 [![NPM](https://img.shields.io/npm/l/mysql-query-util)](https://github.com/uchennaemeruche/mysql-util)
 [![npm](https://img.shields.io/npm/v/mysql-query-util)](https://npmjs.com/package/mysql-query-util)

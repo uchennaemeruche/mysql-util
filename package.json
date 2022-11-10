@@ -1,6 +1,6 @@
 {
   "name": "mysql-query-util",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A mySQL utility function for performing CRUD operations",
   "main": "lib/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "test": "nyc mocha test/*.test.js --exit --require @babel/register --timeout 15000",
     "test:db": "DB_HOST=localhost DB_PASSWORD=123456789 DB_USER=root nyc mocha test/*.test.js --exit --require @babel/register --timeout 15000",
     "prepublishOnly": "npm run build",
+    "preparePub": "npm run build && cp package.json lib",
     "semantic-release": "semantic-release --branches master"
   },
   "nyc": {
