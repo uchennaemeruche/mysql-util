@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 const expect = require("chai").expect;
 const faker = require("faker");
 
-const mysqlUtil = require("../lib/index");
+const mysqlUtil = require("../src/index");
 
 dotenv.config();
 

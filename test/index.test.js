@@ -2,7 +2,7 @@ const dotenv = require("dotenv");
 const expect = require("chai").expect;
 dotenv.config();
 const faker = require("faker");
-const mysqlUtil = require("../lib/index");
+const mysqlUtil = require("../src/index");
 
 const updateBody = {
   gender: "male",
