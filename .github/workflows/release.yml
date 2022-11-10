@@ -52,7 +52,7 @@ jobs:
       - name: Install semantic-release and extra plugins
         run: npm install --save-dev @semantic-release/changelog @semantic-release/git 
       - run: npm run build
-      - run: cp package.json lib
+      # - run: cp package.json lib/
       - name: Release
         run: npx semantic-release
         env:
