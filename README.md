@@ -2,6 +2,8 @@
 
 <!-- [![Build Status](https://travis-ci.com/uchennaemeruche/mysql-util.svg?token=UzXstzQpgUvQ1wppiktz&branch=master)](https://travis-ci.com/uchennaemeruche/mysql-util) -->
 
+[![Build Status](https://github.com/uchennaemeruche/mysql-util/actions/workflows/release.yml/badge.svg?&branch=master)](https://github.com/uchennaemeruche/mysql-util)
+
 [![NPM](https://img.shields.io/npm/l/mysql-query-util)](https://github.com/uchennaemeruche/mysql-util)
 [![npm](https://img.shields.io/npm/v/mysql-query-util)](https://npmjs.com/package/mysql-query-util)
 
@@ -168,9 +170,11 @@ mysqlUtil
 OR
 
 ```js
-const result = mysqlUtil.rawQuery("select * from customers");
+const result = await mysqlUtil.rawQuery("CREATE DATABASE IF NOT EXISTS test");
 
-const result = mysqlUtil.rawQuery("call fetchCustomers"); // Where fetchCustomers is the name of a stored procedure.
+const result = await mysqlUtil.rawQuery("select * from customers");
+
+const result = await mysqlUtil.rawQuery("call fetchCustomers"); // Where fetchCustomers is the name of a stored procedure.
 ```
 
 See the [test folder on github](https://github.com/uchennaemeruche/mysql-util/blob/master/test/schema.test.js) for examples on how to use this method.
