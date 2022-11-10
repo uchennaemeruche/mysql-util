@@ -170,7 +170,7 @@ mysqlUtil
 OR
 
 ```js
-const result = await mysqlUtil.rawQuery("CREATE DATABASE IF NOT EXISTS test");
+const result = await mysqlUtil.rawQuery("CREATE DATABASE IF NOT EXISTS testdb");
 
 const result = await mysqlUtil.rawQuery("select * from customers");
 
