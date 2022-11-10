@@ -75,7 +75,6 @@ describe("#Raw Queries:", () => {
     });
     it("Inserts a customer into table", async() => {
       const result = await mysqlUtil.insert("customers", reqBody)
-
         expect(result).to.not.be.an('error')
         expect(result).to.be.an("object");
         expect(result).to.include.keys(
