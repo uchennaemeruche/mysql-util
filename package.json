@@ -1,6 +1,6 @@
 {
   "name": "mysql-query-util",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A mySQL utility function for performing CRUD operations",
   "main": "lib/index.js",
   "scripts": {
